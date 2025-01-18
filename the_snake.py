@@ -42,21 +42,24 @@ clock = pygame.time.Clock()
 
 # Тут опишите все классы игры.
 class GameObject:
-
+    """Квадрат"""
     def __init__(self, position=(0, 0), body_color=BOARD_BACKGROUND_COLOR):
         self.position = position
         self.body_color = body_color
 
     def draw(self):
+        """Квадрат отрисовка"""
         pass
 
 
 class Apple(GameObject):
-
+    """Яблоко"""
     def randomize_position(self):
+        """Яблоко рандом"""
         self.position = (random.randrange(0, 621, 20), random.randrange(0, 461, 20))
 
     def draw(self):
+        """Яблоко отрисовка"""
         rect = pygame.Rect(self.position, (GRID_SIZE, GRID_SIZE))
         pygame.draw.rect(screen, self.body_color, rect)
         pygame.draw.rect(screen, BORDER_COLOR, rect, 1)
@@ -67,13 +70,15 @@ class Apple(GameObject):
 
 
 class Snake(GameObject):
-
+    """Змея"""
     def update_direction(self):
+        """Змея смена направления"""
         if self.next_direction:
             self.direction = self.next_direction
             self.next_direction = None
 
     def move(self):
+        """Змея движение"""
         self.update_direction()
         if self.direction == UP:
             self.positions = [(self.positions[0][0], self.positions[0][1] - 20 if self.positions[0][1] - 20 >= 0 else 460)] + self.positions
@@ -86,8 +91,8 @@ class Snake(GameObject):
         self.last = self.positions[-1]
         del self.positions[-1]
 
-
     def draw(self):
+        """Змея отрисовка"""
         for position in self.positions[:-1]:
             rect = (pygame.Rect(position, (GRID_SIZE, GRID_SIZE)))
             pygame.draw.rect(screen, self.body_color, rect)
@@ -103,11 +108,12 @@ class Snake(GameObject):
             last_rect = pygame.Rect(self.last, (GRID_SIZE, GRID_SIZE))
             pygame.draw.rect(screen, BOARD_BACKGROUND_COLOR, last_rect)
 
-
     def get_head_position(self):
+        """Змея голова"""
         return self.positions[0]
 
     def reset(self):
+        """Змея сброс"""
         for position in self.positions:
             pygame.draw.rect(screen, BOARD_BACKGROUND_COLOR, pygame.Rect(position, (GRID_SIZE, GRID_SIZE)))
         self.length = 1
@@ -116,9 +122,9 @@ class Snake(GameObject):
         self.next_direction = None
 
     def ate_itself(self):
+        """Змея самопоедание"""
         if len(self.positions) > 1 and self.get_head_position() in self.positions[1::]:
             self.reset()
-
 
     def __init__(self):
         super().__init__((320, 240), SNAKE_COLOR)
@@ -144,6 +150,7 @@ def handle_keys(game_object):
             elif event.key == pygame.K_RIGHT and game_object.direction != LEFT:
                 game_object.next_direction = RIGHT
 
+
 def main():
     # Инициализация PyGame:
     pygame.init()
@@ -163,11 +170,6 @@ def main():
         s.draw()
         a.draw()
         pygame.display.update()
-
-
-
-        # Тут опишите основную логику игры.
-        # ...
 
 
 if __name__ == '__main__':
