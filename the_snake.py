@@ -55,10 +55,15 @@ class GameObject:
 class Apple(GameObject):
     """Яблоко"""
 
-    def randomize_position(self):
+    def randomize_position(self, positions):
         """Яблоко рандом"""
-        r1 = random.randrange(0, 621, 20)
-        self.position = (r1, random.randrange(0, 461, 20))
+        ok = True
+        while ok:
+            r1 = random.randrange(0, 621, 20)
+            r2 = random.randrange(0, 461, 20)
+            if (r1, r2) not in positions:
+                self.position = (r1, r2)
+                ok = False
 
     def draw(self):
         """Яблоко отрисовка"""
@@ -178,7 +183,7 @@ def main():
             s.length += 1
             s.positions.append(s.last)
             s.last = None
-            a.randomize_position()
+            a.randomize_position(s.positions)
         s.draw()
         a.draw()
         pygame.display.update()
