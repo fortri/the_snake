@@ -57,7 +57,8 @@ class Apple(GameObject):
 
     def randomize_position(self):
         """Яблоко рандом"""
-        self.position = (random.randrange(0, 621, 20), random.randrange(0, 461, 20))
+        r1 = random.randrange(0, 621, 20)
+        self.position = (r1, random.randrange(0, 461, 20))
 
     def draw(self):
         """Яблоко отрисовка"""
@@ -82,17 +83,19 @@ class Snake(GameObject):
     def move(self):
         """Змея движение"""
         self.update_direction()
+        sp01 = self.positions[0][1]
+        sp00 = self.positions[0][0]
         if self.direction == UP:
-            new_p = self.positions[0][1] - 20 if self.positions[0][1] - 20 >= 0 else 460
+            new_p = sp01 - 20 if self.positions[0][1] - 20 >= 0 else 460
             self.positions = [(self.positions[0][0], new_p)] + self.positions
         elif self.direction == DOWN:
-            new_p = self.positions[0][1] + 20 if self.positions[0][1] + 20 < 480 else 0
+            new_p = sp01 + 20 if self.positions[0][1] + 20 < 480 else 0
             self.positions = [(self.positions[0][0], new_p)] + self.positions
         elif self.direction == RIGHT:
-            new_p = self.positions[0][0] + 20 if self.positions[0][0] + 20 < 640 else 0
+            new_p = sp00 + 20 if self.positions[0][0] + 20 < 640 else 0
             self.positions = [(new_p, self.positions[0][1])] + self.positions
         elif self.direction == LEFT:
-            new_p = self.positions[0][0] - 20 if self.positions[0][0] - 20 >= 0 else 620
+            new_p = sp00 - 20 if self.positions[0][0] - 20 >= 0 else 620
             self.positions = [(new_p, self.positions[0][1])] + self.positions
         self.last = self.positions[-1]
         del self.positions[-1]
@@ -130,8 +133,8 @@ class Snake(GameObject):
 
     def ate_itself(self):
         """Змея самопоедание"""
-        l = len(self.positions)
-        if l > 1 and self.get_head_position() in self.positions[1::]:
+        pos_len = len(self.positions)
+        if pos_len > 1 and self.get_head_position() in self.positions[1::]:
             self.reset()
 
     def __init__(self):
